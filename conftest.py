@@ -13,4 +13,3 @@ def browser():
     print("\nquit browser..")
     browser.quit()
 
-    
