@@ -1,6 +1,8 @@
 import math
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import NoAlertPresentException
+from .locators import MainPageLocators
+
 
 class BasePage:
     def __init__(self, browser, url, timeout=10):
@@ -31,3 +33,11 @@ class BasePage:
             alert.accept()
         except NoAlertPresentException:
             print("No second alert presented")
+
+    def open_product_basket(self):
+        basket = self.browser.find_element(
+            *MainPageLocators.PRODUCT_BASKET_BUTTON
+        )
+        basket.click()
+        current_url = str(self.browser.current_url)
+        assert "basket" in current_url, "The product basket page is not opened"

@@ -1,3 +1,7 @@
+from telnetlib import EC
+
+from selenium.webdriver.support.wait import WebDriverWait
+
 from .base_page import BasePage
 from .locators import ProductPageLocators
 from .main_page import MainPage
@@ -13,7 +17,7 @@ class ProductPage(BasePage):
         assert "?promo=newYear" in current_url,\
             "There isn't '?promo=newYear' in current url"
 
-    def add_to_bag(self):
+    def add_product_to_bag(self):
         page = MainPage(self.browser, link)
         page.open()
         self.browser.find_element(
@@ -21,13 +25,14 @@ class ProductPage(BasePage):
         ).click()
         page.solve_quiz_and_get_code()
 
+    def should_be_successful_message(self):
+        page = MainPage(self.browser, link)
+        self.add_product_to_bag()
+        WebDriverWait(self.browser, 5).until(
+            EC.element_to_be_clickable(*ProductPageLocators.SUCCESSFUL_MESSAGE))
+        assert page.is_element_present(
+            *ProductPageLocators.SUCCESSFUL_MESSAGE),\
+            "There is not a message about successful editing a product"
 
     def cost_should_be_match(self):
         pass
-
-
-
-
-
-
-
